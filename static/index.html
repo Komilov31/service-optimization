@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Отображение заказа</title>
+<link rel="stylesheet" href="http://localhost:8081/static/style.css" />
+</head>
+<body>
+
+<div class="input-container">
+  <input type="text" id="orderUid" placeholder="Введите order_uid" />
+  <button id="fetchOrderBtn">Получить заказ</button>
+</div>
+
+<div id="orderDisplay" class="order-container" style="display:none;"></div>
+<div id="errorMsg" class="error"></div>
+
+<script src="http://localhost:8081/static/script.js"></script>
+</body>
+</html>
