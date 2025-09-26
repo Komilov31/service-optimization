@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+
+	"net/http"
+	_ "net/http/pprof"
 
 	"github.com/Komilov31/l0/cmd/api"
 	"github.com/Komilov31/l0/db"
@@ -13,7 +17,7 @@ func main() {
 
 	logger, err := zap.NewProduction()
 	if err != nil {
-		panic("could not initialize logger")
+		log.Fatal("could not initialize logger")
 	}
 	defer logger.Sync()
 
@@ -27,17 +31,22 @@ func main() {
 
 	pgxpool, err := db.NewSqlStorage(dbConfig)
 	if err != nil {
-		logger.Error("could not create db instance")
-		panic("could not create db instance")
+		log.Fatal("could not create db instance: ", err)
 	}
 
 	err = db.InitStorage(pgxpool)
 	if err != nil {
-		logger.Error("could not initialize db")
-		panic("could not initialize db instance " + err.Error())
+		log.Fatal("could not initialize db instance " + err.Error())
 	}
 	logger.Info("sucessfully initialized db")
 
-	apiServer := api.NewAPIServer(":8081", pgxpool, logger)
+	go func() {
+		logger.Info("starting server for pprof on :5000")
+		if err := http.ListenAndServe(":5000", http.DefaultServeMux); err != nil {
+			logger.Error("could not start pprof server")
+		}
+	}()
+
+	apiServer := api.NewAPIServer(":8080", pgxpool, logger)
 	apiServer.Run()
 }

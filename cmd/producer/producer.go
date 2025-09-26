@@ -69,6 +69,6 @@ func (p *Producer) Produce() {
 			)
 		}
 
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 10)
 	}
 }
