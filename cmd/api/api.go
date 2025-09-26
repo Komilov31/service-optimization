@@ -29,6 +29,7 @@ func (s *APIServer) Run() error {
 	repository := repository.New(s.db, s.logger)
 	inMemoryCache := cache.New(repository)
 	inMemoryCache.LoadFromDbToCache()
+	inMemoryCache.StartCleaner()
 	service := service.New(repository, inMemoryCache)
 	handler := handler.New(service)
 
