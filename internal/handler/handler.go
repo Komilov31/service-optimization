@@ -5,6 +5,7 @@ import (
 
 	"github.com/Komilov31/l0/internal/model"
 	"github.com/gin-gonic/gin"
+	json "github.com/goccy/go-json"
 	"github.com/google/uuid"
 )
 
@@ -29,8 +30,15 @@ func (h *Handler) GetOrderById(c *gin.Context) {
 		c.JSON(http.StatusNotFound, map[string]string{"error": "not order with provided uid"})
 		return
 	}
+
 	c.Header("Access-Control-Allow-Origin", "*")
-	c.JSON(http.StatusOK, &order)
+	data, err := json.Marshal(order)
+	if err != nil {
+		c.JSON(http.StatusNotFound, map[string]string{"error": "could not unmarshal order"})
+		return
+	}
+	c.Writer.WriteHeader(http.StatusOK)
+	c.Writer.Write(data)
 }
 
 func (h *Handler) GetMainPage(c *gin.Context) {

@@ -2,13 +2,14 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+
 	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	json "github.com/goccy/go-json"
 	"github.com/segmentio/kafka-go"
 	"go.uber.org/zap"
 )
@@ -69,6 +70,6 @@ func (p *Producer) Produce() {
 			)
 		}
 
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Minute)
 	}
 }
